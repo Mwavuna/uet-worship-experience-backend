@@ -1,4 +1,5 @@
 import "dotenv/config";
+import cors from "cors";
 import express from "express";
 import fs from "node:fs";
 import path from "node:path";
@@ -80,6 +81,15 @@ const parseId = (req) => {
 const wrap = (fn) => (req, res, next) => fn(req, res).catch(next);
 
 const app = express();
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "x-access-code"],
+  })
+);
+app.options("*", cors());
 app.use(express.json({ limit: "200kb" }));
 
 app.get("/health", (req, res) => res.json({ ok: true }));
